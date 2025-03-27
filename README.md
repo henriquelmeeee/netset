@@ -21,3 +21,4 @@ I use the following to divide the dataset:
 <!output!> and </!output!> -- opens and closes an output (model's expected output for training).
 <comment> -- used in the top of all .txt files to tell something important about that specific file.
 for datasets that does not have input-output (so they are based on text completion), it's used the flag <TEXT_COMPLETION> at the beginning of the text file.
+<!conversation!> -- used to group <!input!> and <!output!> if they come from the same context
