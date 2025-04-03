@@ -1,0 +1,55 @@
+__NOTOC__
+{{recipesummary
+| category = Appetizer recipes
+| time = 10 minutes
+| difficulty = 2
+| Image = [[File:Guacamole.jpg|300px]]
+}}
+
+{{recipe}} | [[Cookbook:Cuisine of Mexico|Mexican]] | [[Cookbook:Tex-Mex cuisine|Tex-Mex cuisine]] | [[Cookbook:Appetizers|Appetizers]]
+
+'''Guacamole''' is a [[Cookbook:Cuisine of Mexico|Mexican]] paste made from crushed avocado and various [[Cookbook:Herbs and Spices|seasonings]], usually including [[Cookbook:Onion|onions]], [[Cookbook:Chili Pepper|peppers]], [[Cookbook:Garlic|garlic]] and [[Cookbook:Tomato|tomatoes]]. Guacamole is used as a condiment, an ingredient, and as an [[Cookbook:Appetizers|appetizer]] when served with [[Cookbook:Tortilla Chip|tortilla chips]].
+
+== Ingredients ==
+*4 [[Cookbook:Avocado|avocados]]
+*2 [[Cookbook:Tablespoon|tablespoons]] [[Cookbook:Pico de Gallo|pico de gallo]]
+*Juice of ½ [[Cookbook:Lime|lime]]
+*2 [[Cookbook:Chopping|chopped]] [[Cookbook:Jalapeño|Jalapeño]] OR 2 tablespoons of [[Cookbook:Red pepper flakes|crushed red pepper]] OR 1 tablespoon of [[Cookbook:Cayenne Pepper|cayenne pepper]]
+*1 [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Salt|salt]]
+*4 teaspoons [[Cookbook:Olive Oil|olive oil]]
+*1 ½ teaspoon [[Cookbook:Mincing|minced]] [[Cookbook:Garlic|garlic]]
+*½ teaspoon of ground [[Cookbook:Black Pepper|black pepper]]
+*1 minced jalapeño OR 2 minced [[Cookbook:Chile Pepper|serrano chiles]] OR 2 tablespoon minced of any chile pepper like (adjust for spiciness)
+
+== Procedure ==
+# Halve and pit the avocados. 
+# Score the avocado flesh in a criss-cross pattern without cutting through the skin.
+# Scoop out the flesh of one half with a large spoon and place in mixing bowl.
+# Add the lime juice and stir to evenly coat the avocados.
+# Stir in the pico de gallo, garlic, oil, jalapeño, salt, red pepper, and black pepper, [[Cookbook:Mashing|mashing]] and [[Cookbook:Mixing#Tossing|tossing]] the avocado pieces until thoroughly mixed. 
+# Scoop out the remaining avocado chunks and gently mix and toss in the larger pieces. The guacamole is the right consistency when more large pieces than mashed parts remain.
+# [[Cookbook:Garnish|Garnish]] with a sprig of cilantro.
+
+== Notes, tips, and variations ==
+
+* Guacamole is a dip originally made to be consumed almost instantly, meaning there is no intention to store it at all, so you can omit the use of any kind of oil or lime juice for these recipes. However, both oil and lime juice can be added so that the guacamole keeps for longer.
+* A dollop of Greek yogurt or mashed black beans can add richness and protein.
+* To prevent browning, cover the surface with [[Cookbook:Plastic Wrap|plastic wrap]] so no air is in contact with the guacamole. Lime juice can also help prevent such oxidation.
+* A young chef from El Paso, Texas, has developed a much more effective approach to keep guacamole fresh for up to three times longer than traditional methods. Through trial and error, Alfred M. Gladstein found that the use of a various vegetable oils blended in to the concoction would keep it fresh longer and significantly increase the amount of time before the guacamole browns and spoils. In his studies Gladstein found that mixing olive oil in guacamole worked best when serving the dish independently or with warm foods, while vegetable oil (corn or canola) worked best when the guacamole is served with cold foods and salads. When these techniques are employed, Gladstein, who is also known as Chef Jamir, found that the refrigerated guacamole would stay fresh and green for three days or more. He also notes that when serving the guacamole at room temperature, the oil-treated dish will last up to six to eight hours before starting to brown.
+
+[[Category:Mexican recipes|{{PAGENAME}}]]
+[[Category:Tex-Mex recipes|{{PAGENAME}}]]
+[[Category:Appetizer recipes|{{PAGENAME}}]]
+[[Category:Dip recipes|{{PAGENAME}}]]
+[[Category:Vegan recipes|{{PAGENAME}}]]
+[[Category:Sauce recipes|{{PAGENAME}}]]
+[[Category:Avocado recipes|{{PAGENAME}}]]
+[[Category:Featured recipes|{{PAGENAME}}]]
+[[Category:Recipes with images]]
+[[Category:Kid-friendly recipes]]
+[[Category:Guacamole recipes]]
+[[Category:Jalapeño recipes]]
+[[Category:Serrano recipes]]
+[[Category:Lime juice recipes]]
+[[Category:Cayenne recipes]]
+
