@@ -1,0 +1,12 @@
+Here we will put all the things we already have on the dataset
+
+Writing:
+1. George Orwell Book: 1984
+2. George Orwell Book: Animal Farm
+3. Australia Felix book from Trilogy "The Fortunes of Richard Mahony"
+
+Culinary:
+1. Guacamole (from Wikibooks)
+
+Explaining:
+1. Lambda calculus

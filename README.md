@@ -22,3 +22,4 @@ I use the following to divide the dataset:
 <comment> -- used in the top of all .txt files to tell something important about that specific file.
 for datasets that does not have input-output (so they are based on text completion), it's used the flag <TEXT_COMPLETION> at the beginning of the text file.
 <!conversation!> -- used to group <!input!> and <!output!> if they come from the same context
+<!mask!> -- any text between a mask tag must NOT be included in the gradient on training
