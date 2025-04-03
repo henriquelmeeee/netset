@@ -1,0 +1,2458 @@
+<comment>Reference: https://huggingface.co/datasets/winglian/codeforces-cot-16k-context/viewer/solutions_decontaminated/train?p=2&views%5B%5D=train&row=291
+<comment>16k context window required!
+
+<!input!>
+You will be given a competitive programming problem. Please reason step by step about the solution, then provide a complete implementation in C++17.
+
+Your solution must read input from standard input (cin), write output to standard output (cout).
+Do not include any debug prints or additional output.
+
+Put your final solution within a single code block:
+```cpp
+<your code here>
+```
+
+# Problem
+
+Kristina has two arrays $$$a$$$ and $$$b$$$, each containing $$$n$$$ non-negative integers. She can perform the following operation on array $$$a$$$ any number of times:
+
+- apply a decrement to each non-zero element of the array, that is, replace the value of each element $$$a_i$$$ such that $$$a_i > 0$$$ with the value $$$a_i - 1$$$ ($$$1 \le i \le n$$$). If $$$a_i$$$ was $$$0$$$, its value does not change.
+
+Determine whether Kristina can get an array $$$b$$$ from an array $$$a$$$ in some number of operations (probably zero). In other words, can she make $$$a_i = b_i$$$ after some number of operations for each $$$1 \le i \le n$$$?
+
+For example, let $$$n = 4$$$, $$$a = [3, 5, 4, 1]$$$ and $$$b = [1, 3, 2, 0]$$$. In this case, she can apply the operation twice:
+
+- after the first application of the operation she gets $$$a = [2, 4, 3, 0]$$$;
+- after the second use of the operation she gets $$$a = [1, 3, 2, 0]$$$.
+
+Thus, in two operations, she can get an array $$$b$$$ from an array $$$a$$$.
+
+Execution time limit: 1.0 seconds
+Memory limit: 256.0 MB
+
+## Input Format
+The first line of the input contains an integer $$$t$$$ ($$$1 \le t \le 10^4$$$) —the number of test cases in the test.
+
+The descriptions of the test cases follow.
+
+The first line of each test case contains a single integer $$$n$$$ ($$$1 \le n \le 5 \cdot 10^4$$$).
+
+The second line of each test case contains exactly $$$n$$$ non-negative integers $$$a_1, a_2, \dots, a_n$$$ ($$$0 \le a_i \le 10^9$$$).
+
+The third line of each test case contains exactly $$$n$$$ non-negative integers $$$b_1, b_2, \dots, b_n$$$ ($$$0 \le b_i \le 10^9$$$).
+
+It is guaranteed that the sum of $$$n$$$ values over all test cases in the test does not exceed $$$2 \cdot 10^5$$$.
+
+## Output Format
+For each test case, output on a separate line:
+
+- YES, if by doing some number of operations it is possible to get an array $$$b$$$ from an array $$$a$$$;
+- NO otherwise.
+
+You can output YES and NO in any case (for example, strings yEs, yes, Yes and YES will be recognized as a positive response).
+
+## Examples
+```input
+6
+4
+3 5 4 1
+1 3 2 0
+3
+1 2 1
+0 1 0
+4
+5 3 7 2
+1 1 1 1
+5
+1 2 3 4 5
+1 2 3 4 6
+1
+8
+0
+1
+4
+6
+```
+```output
+YES
+YES
+NO
+NO
+YES
+NO
+```
+
+## Note
+The first test case is analyzed in the statement.
+In the second test case, it is enough to apply the operation to array $$$a$$$ once.
+
+In the third test case, it is impossible to get array $$$b$$$ from array $$$a$$$.
+</!input!>
+<!output!>
+Okay, I need to solve this problem where Kristina can perform operations on array a to turn it into array b. Let's think about the conditions that must be met for this to be possible.
+
+So, the operation is that each non-zero element of a is decremented by 1. She can do this any number of times. So, each operation reduces the non-zero elements by 1. The key is to figure out for each element a_i and b_i whether after some number of operations, a_i becomes exactly b_i.
+
+Wait, but how does the operation work? Each time she performs an operation, all non-zero elements are decremented. So, the number of operations she does is the same for all elements, except those that hit zero. Because once an element becomes zero, it's no longer decremented. So, for each element a_i, the number of times it's decremented is the number of operations done after it hasn't hit zero. Hmm, maybe this is a bit tricky.
+
+Let me think. Let's say the total number of operations performed is k. For each element a_i, after k operations, its value would be max(a_i - k, 0) if in each operation, if a_i was not zero, it was decremented. Wait, no. Because if a_i was 5, and after some steps it becomes zero. For example, if k is 6, then a_i would be 5-6 = -1, but since in each step it's decremented only if it's non-zero. Wait, no. Wait, in each operation, all non-zero elements are decremented. So for a_i, after each operation, if it's non-zero, subtract 1. So, the actual number of times a_i is decremented is the minimum between k and a_i's initial value. Because once a_i reaches zero, further operations don't affect it. Wait, no. Wait, suppose a_i is 3 and k is 5. Then the first three operations would decrement it to 0, but the next two operations have no effect. So the total decrements for a_i is 3, which is the minimum of 3 and 5. So the final value is a_i - min(k, a_i) = 3 - 3 = 0. So the formula for each a_i after k operations is max(a_i - k, 0), but only if k >= the number of steps until it becomes zero. Wait, no. Wait, for a_i=5, k=3: after 3 operations, it's 5-3=2. For a_i=5 and k=7, after 5 operations, it's zero, and the remaining two operations do nothing. So final value is zero. So the formula is that each a_i after k operations is max(a_i - k, 0). Because in each of the k operations, the element is decremented by 1 only if it was non-zero. So after k steps, the element's value is a_i minus the number of times it was non-zero during those steps. But the number of times it was non-zero is min(k, a_i_initial), because after a_i_initial steps, it becomes zero and is not decremented anymore. So the final value is a_i_initial - min(k, a_i_initial) = max(a_i_initial - k, 0). So the formula holds.
+
+So for all i, after k operations, a_i becomes max(a_i_initial - k, 0). But wait, the problem states that after some number of operations, the array a should be exactly equal to array b. So for each i, we need max(a_i - k, 0) = b_i. And this k must be the same for all elements. So for each element, the required k is either (a_i - b_i), but only if b_i <= a_i and a_i - k >=0 and after k steps, and also, if in the steps, whenever during the k operations, when the element is decremented, it's possible.
+
+Wait, but how do we find the k? Because all elements must agree on the same k. So for each element, the possible k must satisfy one of two conditions:
+
+If a_i > b_i: Then the required k must be exactly (a_i - b_i). Because during each of the k steps, the element is decremented. So a_i - k = b_i → k = a_i - b_i.
+
+But if a_i == b_i, then the k can be any value >=0, but only if a_i is 0. Because if a_i is not zero, then during the k operations, after k steps, if a_i is equal to b_i (which is a_i), then the number of steps must be zero. Wait, this is getting complicated.
+
+Wait, let's think again. For each element i:
+
+max(a_i - k, 0) = b_i.
+
+So this equation must hold for some k >=0.
+
+So for each i, the possible k's are:
+
+If b_i > a_i: Impossible. Because max(a_i -k, 0) can't be larger than a_i. So in this case, output is NO.
+
+If b_i == a_i: Then to have max(a_i -k, 0) = a_i, which equals b_i. Then a_i -k must be >=0 and equal to a_i. So this implies k=0. But wait, a_i -k must equal a_i → k=0. But also, if a_i is zero, then max(0 -k,0) = 0, so any k >=0. So for elements where a_i = b_i, if a_i is not zero, then k must be zero. If a_i is zero, then k can be any value as long as other elements are satisfied.
+
+So this is tricky.
+
+So, the steps to solve this problem:
+
+1. For each element i, check if b_i > a_i. If any such i exists, output NO.
+
+2. For all elements where a_i > b_i, compute required k as a_i - b_i. All these elements must agree on the same k. So all such elements must have the same k. Also, for elements where a_i == b_i, if a_i is not zero, then k must be zero. But if a_i is zero and equals b_i, then the k can be any value (but must match the k from other elements).
+
+So let's break it down.
+
+First, check if any b_i > a_i. If yes, impossible.
+
+Else:
+
+We need to find a k such that for all i:
+
+if a_i > b_i → k = a_i - b_i.
+
+if a_i == b_i → if a_i (and thus b_i) is zero: then k can be >= anything (as long as other elements require k >=0). But if a_i is non-zero and equals b_i, then this can only be possible if k is zero. Because if a_i is non-zero, and k is non-zero, then after k operations, a_i would be a_i -k (since a_i -k >=0?), but that would have to equal b_i (which is a_i). So a_i -k = a_i → k=0. So for elements where a_i == b_i and a_i !=0, then k must be zero.
+
+So the approach is:
+
+- For each element where a_i != b_i:
+
+- if a_i < b_i: impossible.
+
+- else: compute required k = a_i - b_i. All these required k must be the same.
+
+- Also, check that for elements where a_i == b_i and a_i !=0: k must be zero.
+
+So the steps for each test case:
+
+1. Check if any b_i > a_i. If yes, output NO.
+
+2. Collect all the k values from elements where a_i > b_i. These k's must all be equal.
+
+3. Let k_candidate be the common k. If there are multiple different k's among them, output NO.
+
+4. Then, check for elements where a_i == b_i:
+
+- if a_i (and thus b_i) is non-zero: then k_candidate must be zero. Because otherwise, after k_candidate operations, a_i would be a_i -k_candidate. But since a_i == b_i, this implies that a_i -k_candidate must equal a_i → k_candidate must be zero.
+
+- if a_i is zero, then no problem. Because after any k >=0 operations, a_i remains zero.
+
+So, in code:
+
+For each test case:
+
+Read n, a array, b array.
+
+Check for any i where b[i] > a[i]. If found, output NO.
+
+Then collect all the possible k's from elements where a[i] > b[i]. Let's call this set K.
+
+If K is empty:
+
+Then all elements are a[i] == b[i]. So possible if:
+
+For all elements where a[i] == b[i], if a[i] is non-zero, then k must be zero. But since there are no elements in K, which means there's no elements where a[i] > b[i], so all elements are a[i] == b[i]. So in this case, we can choose k=0. Then, after zero operations, a remains as is, which equals b. But what if some a[i] is non-zero and equals b[i], but others are zero? For example, a = [5, 0], b = [5, 0]. Then, after k=0 operations, it's correct. So yes.
+
+So in this case, output YES.
+
+Else:
+
+Check that all elements in K have the same value. If not, output NO.
+
+Then, the common k is the candidate. Let k = K[0].
+
+Now, check for all elements where a[i] == b[i]:
+
+if a[i] != 0 → then k must be 0.
+
+So if any element where a[i] == b[i] and a[i] !=0 exists, then the candidate k must be zero. But if the candidate k is not zero, then this is impossible.
+
+So:
+
+For these elements (a[i] == b[i] and a[i] !=0):
+
+if k !=0 → output NO.
+
+Also, need to ensure that for elements where a[i] == 0 (so b[i] is also zero), the candidate k is >=0. Which it is, since k is derived from a[i] - b[i] when a[i] > b[i]. But in the case where K is non-empty, and k is positive (since a[i] > b[i] and k = a[i]-b[i]).
+
+So, in this case, for elements where a[i] ==0 and b[i] ==0, they are okay.
+
+So, steps:
+
+After determining k_candidate (the common k from K):
+
+For all elements where a[i] == b[i]:
+
+if a[i] != 0 and k_candidate !=0 → invalid.
+
+So, if any such elements exist, then output NO.
+
+Else, check that for elements where a[i] > b[i], their a[i] - b[i] equals k_candidate.
+
+Also, for elements where a[i] ==0 and b[i] ==0, they are okay regardless of k_candidate.
+
+So, if all the above checks pass, output YES.
+
+Wait, but what about elements where a[i] > b[i], but after applying k_candidate operations, their value is exactly b[i]. Let's see: for those elements, a[i] - k_candidate should equal b[i], but since k_candidate is a[i]-b[i], then a[i] - (a[i]-b[i}) = b[i], which is correct.
+
+But in the case where a[i] - k_candidate <0, but since we checked that b[i] <= a[i], and k_candidate is a[i] -b[i], then a[i] -k_candidate = b[i] >=0. So that's okay.
+
+So the code steps are:
+
+For each test case:
+
+Read n, a, b.
+
+For each i in 0..n-1:
+
+if b[i] > a[i], return NO.
+
+Collect all k where k = a[i] - b[i] for i where a[i] > b[i].
+
+If there are any k's and they are not all the same, return NO.
+
+If there are no k's (all a[i] == b[i]):
+
+Then check if all elements where a[i] == b[i] are allowed. But how? Since for these elements, if a[i] is non-zero, then k must be zero. But since there are no k's, the candidate k could be any value, but since the only possible k is the one from the elements that require it (which there are none), we can choose any k. Wait, but the actual k here is zero, because all elements must be transformed to their b[i] with the same k. Since all a[i] == b[i], then any k would work as long as the operations result in a[i] being equal to b[i]. Wait, no. Because for elements where a[i] == b[i], after k operations, their value must be b[i] (which is a[i]).
+
+For elements where a[i] == b[i], after k operations, their value is max(a_i -k, 0) = b_i. Since a_i = b_i, this implies that max(a_i -k, 0) = a_i. So:
+
+Case 1: a_i is zero. Then max(0 -k, 0) is zero. So any k is allowed.
+
+Case 2: a_i is non-zero. Then max(a_i -k, 0) = a_i → a_i -k must be >=0 and equal to a_i. So k must be zero.
+
+So, in the case where there are no elements where a[i] > b[i] (so K is empty), then:
+
+If any element has a[i] = b[i] and a[i] !=0, then k must be zero. But since K is empty, the candidate k can be any (since there are no elements requiring a particular k). But since the candidate k is not determined by any elements, how do we choose it?
+
+In this scenario, all elements have a[i] = b[i]. So we need to find a k such that for all elements, max(a_i -k, 0) = a_i. Which is possible if:
+
+For each element:
+
+if a_i is non-zero → max(a_i -k, 0) = a_i → a_i -k >=0 → k <=a_i, and a_i -k =a_i → k=0.
+
+So, in this case, if all elements are a_i = b_i and are zero, then any k is allowed. So the answer is YES.
+
+If there are elements with a_i =b_i and non-zero, then k must be zero. But then, after zero operations, all elements are as they are, which is correct. So in this case, the answer is YES.
+
+Wait, so in the scenario where all a[i] ==b[i], regardless of whether they are zero or not, the answer is YES. Because performing zero operations will result in a ==b. So in that case, the answer is YES.
+
+But wait, wait. Suppose we have a test case where a = [5, 5], b = [5,5]. Then, after zero operations, yes. So output is YES.
+
+Another test case: a = [0,0], b = [0,0]. Also YES.
+
+So when K is empty, meaning all elements are a[i] ==b[i], then the answer is YES.
+
+So in the code, when K is empty (no elements with a[i] > b[i]), then answer is YES.
+
+But wait, let's think of a case where some elements are a[i] ==b[i] but non-zero, and others are zero. For example:
+
+Test case:
+
+n=2
+
+a = [3,0]
+
+b = [3,0]
+
+Then, after zero operations, it's correct. So answer YES.
+
+Another example: a = [2, 2], b = [2, 2]. Zero operations. Correct.
+
+Another example: a = [0,0], b = [0,0]. Any k is allowed, but zero operations. Correct.
+
+So in the case where K is empty, the answer is always YES.
+
+So the code can proceed as follows.
+
+Now, the code steps:
+
+For each test case:
+
+Check if any b[i] > a[i]. If yes, output NO.
+
+Collect the list of k's for all elements where a[i] > b[i].
+
+If len(k) ==0:
+
+Output YES.
+
+Else:
+
+Check if all k's are the same. If not, output NO.
+
+So, the candidate k is the first one (since all are same).
+
+Then, for elements where a[i] ==b[i]:
+
+if a[i] !=0:
+
+if candidate k is not zero → output NO.
+
+So, collect all elements where a[i] ==b[i] and a[i] !=0. For any such elements, if candidate k is not zero → invalid.
+
+So, code:
+
+if any element where a[i] ==b[i] and a[i] !=0 exists, then the candidate k must be zero.
+
+So, check if candidate k is zero. If not, then invalid.
+
+So:
+
+if candidate_k is not zero:
+
+for all elements where a[i] ==b[i] and a[i] !=0:
+
+if exists → output NO.
+
+So, code:
+
+has_non_zero_equal = False
+
+for each i in 0..n-1:
+
+if a[i] ==b[i] and a[i] !=0:
+
+has_non_zero_equal = True
+
+if has_non_zero_equal:
+
+if candidate_k !=0:
+
+output NO.
+
+So, after that, check if all elements where a[i] >b[i] have k = candidate_k.
+
+Then, all other elements are okay.
+
+So output YES.
+
+So putting all together.
+
+Let me code this step by step.
+
+Now, the code.
+
+Read t test cases.
+
+For each test case:
+
+Read n.
+
+Read a as a list of integers.
+
+Read b as a list of integers.
+
+Check for each i, if b[i] >a[i], return NO.
+
+Collect the list of (a[i] - b[i]) for i where a[i] >b[i].
+
+If the list is not empty:
+
+check if all elements in the list are equal. If not, output NO.
+
+candidate_k = list[0]
+
+check if candidate_k is negative? Well, since a[i] >b[i], a[i]-b[i] is positive. So candidate_k is positive.
+
+Now, check if any element where a[i] ==b[i] and a[i] !=0 exists. If yes, and candidate_k !=0 → output NO.
+
+Else:
+
+output YES.
+
+So the code:
+
+In C++, for each test case:
+
+We can loop through the elements.
+
+First, check if any b[i] >a[i]. If found, print NO and proceed.
+
+Then, collect the k values.
+
+If the k list is empty:
+
+output YES.
+
+Else:
+
+Check all elements in k list are same. If not, output NO.
+
+Then check for elements where a[i] ==b[i] and a[i] !=0. If any such exists, then candidate_k must be zero. Otherwise, it's invalid.
+
+So:
+
+bool has_non_zero_eq = false;
+
+for (int i=0; i<n; i++) {
+
+if (a[i] == b[i] && a[i] !=0) {
+
+has_non_zero_eq = true;
+
+}
+
+}
+
+if (has_non_zero_eq && candidate_k !=0) {
+
+cout << "NO\n";
+
+continue;
+
+}
+
+// else, output YES.
+
+So, the code.
+
+Now, let's test against the sample input.
+
+Sample Input 1:
+
+6
+
+4
+
+3 5 4 1
+
+1 3 2 0
+
+In this case, after checking each b[i] <=a[i], which they are.
+
+Then, collect k for a[i] >b[i]:
+
+For each element:
+
+3-1=2, 5-3=2, 4-2=2, 1-0=1. Wait, wait: 1 in a is 1, b is 0. So a[i] >b[i] → k is 1-0=1. So the k list is [2,2,2,1]. So all elements must be same. But here, the first three elements have k=2, last element has k=1. So the list is [2,2,2,1], which are not same. So output NO. But in the sample input, the first test case outputs YES. Wait, what's wrong here?
+
+Wait the sample input first test case:
+
+a = [3,5,4,1], b = [1,3,2,0].
+
+So for each element:
+
+3-1=2.
+
+5-3=2.
+
+4-2=2.
+
+1-0=1.
+
+So the k list is [2,2,2,1]. So the code would output NO. But the sample answer is YES.
+
+Wait, this is a problem. Because according to our logic, the k list must have all same elements. But in the sample case, the k values are 2,2,2,1. So why does the sample output say YES?
+
+Wait, that's a problem. Because according to the problem statement, in the sample input, after two operations, the array a becomes [1,3,2,0]. So how does that fit into our logic?
+
+Wait, the number of operations is k=2.
+
+For each element:
+
+3 -2 =1 → correct.
+
+5-2=3 → correct.
+
+4-2=2 → correct.
+
+1: in each operation, it's decremented until it becomes zero. So for two operations:
+
+First operation: decrement 1 → 0.
+
+Second operation: 0 (since it's already zero, no decrement).
+
+So the element becomes 0. Which matches b.
+
+So for that element, the k (number of operations) is 2. But according to our formula, a[i] -k must be equal to b[i], but 1-2= -1, but max(a[i]-k,0) is 0, which equals b[i]. Oh right! So in our code, the calculation of k as a[i] -b[i] is wrong. Because for some elements, the required k may not be a[i]-b[i], but something else. Because the element may reach zero before k steps.
+
+So our initial approach is wrong.
+
+Oh no! This is a critical mistake. So the formula for the required k is not a[i] -b[i]. Because the element may have been decremented to zero in some steps, and then not decremented again.
+
+So our initial logic is incorrect. So we need to re-examine the problem.
+
+Let me re-express the problem.
+
+After performing k operations, each element a_i becomes:
+
+max(a_i - x, 0), where x is the number of times the element was decremented. x is the minimum between k and the initial a_i. Because once the element becomes zero, it's not decremented anymore. So x = min(k, a_i_initial). So the final value is a_i_initial - x. So for the element to be equal to b_i, we must have a_i_initial - x = b_i.
+
+But x is the number of times the element was decremented in k operations, which is min(k, a_i_initial).
+
+So:
+
+b_i = a_i - x, where x = min(k, a_i).
+
+So for each element i, either:
+
+Case 1: a_i >= k. Then x =k → b_i =a_i -k. So k = a_i -b_i. So in this case, k must be a_i -b_i.
+
+Case 2: a_i <k. Then x =a_i → b_i = a_i -a_i =0. So in this case, b_i must be zero, and a_i <k.
+
+So for each element i:
+
+Either (b_i = a_i -k) and a_i >=k (so k = a_i -b_i), or (b_i =0 and a_i <k).
+
+But all elements must share the same k.
+
+So how to determine if such a k exists.
+
+So for each element i, one of the following must hold:
+
+1. a_i >=k and b_i = a_i -k.
+
+OR
+
+2. b_i =0 and a_i <k.
+
+So the problem is to find a k such that for all i:
+
+if b_i >0 → (a_i -k == b_i) and a_i >=k.
+
+if b_i ==0 → either a_i >=k (so a_i -k ==0) OR a_i <k (so after a_i steps, it becomes zero and remains).
+
+Wait, but if b_i is zero, then a_i -x must be zero. So x can be any value >= a_i. Because x is min(k, a_i). So:
+
+if k >=a_i → x =a_i → a_i -x =0 → which is correct.
+
+if k <a_i → x =k → a_i -k. For this to be zero, a_i -k must be zero → k =a_i. Which is possible only if a_i =k.
+
+But if a_i is zero, then x is zero, so a_i -x is zero.
+
+So for each element where b_i is zero:
+
+if a_i ==0 → no constraints (since after any k steps, it's zero).
+
+else:
+
+We can have either:
+
+k >=a_i (so x =a_i → a_i -a_i =0).
+
+OR
+
+k ==a_i (so x =k → a_i -k =0).
+
+Wait, but k >=a_i is the same as x =a_i, leading to a_i -x =0.
+
+So, for elements where b_i =0 and a_i !=0:
+
+We must have k >=a_i, or k = a_i -b_i (but b_i is zero, so k =a_i). Wait, but if k is a_i, then a_i -k =0, which is correct. So in this case, k can be >=a_i (so x =a_i) or equal to a_i (x =k =a_i). Both result in a_i -x =0.
+
+So for these elements, the possible k can be any value >=a_i, or exactly a_i (but a_i is part of >=a_i). Wait, no. If k >=a_i, then x =a_i → a_i -x =0.
+
+So for elements where b_i is zero and a_i !=0, the possible k's are any value >=a_i. Or k can be exactly a_i, which is included in >=a_i.
+
+So, the possible k's for such elements are k >=a_i.
+
+But k must be the same for all elements.
+
+So the problem is to find a k that satisfies all the conditions for all elements.
+
+Hmm. This complicates the approach.
+
+So the approach is:
+
+We need to find a value k such that:
+
+For each element i:
+
+Either:
+
+1. b_i = a_i -k and a_i >=k (which implies that k = a_i -b_i, and since a_i >=k, we have a_i - (a_i -b_i) =b_i → which is always true, but k must be a_i -b_i and a_i >=k → a_i -b_i <=a_i → which implies that b_i >=0. Which is already checked since we have to have b_i <=a_i.)
+
+OR
+
+2. b_i =0 and k >=a_i.
+
+So, for each element, we have two possibilities. But all elements must have their constraints satisfied by the same k.
+
+So how to find such a k.
+
+Let's think of the possible k for each element:
+
+For each element i:
+
+If b_i >0:
+
+Then k must be exactly a_i - b_i (from case 1), and also a_i >=k → a_i -b_i <=a_i → b_i >=0 → which is already checked.
+
+Also, since a_i >=k → a_i >= a_i -b_i → b_i >=0 → which is already true.
+
+So for this element, the only possible k is a_i -b_i. But this k must also satisfy the constraints of other elements.
+
+If b_i =0:
+
+Then either:
+
+a. k =a_i (from case1, where a_i >=k. So k =a_i -0 → k=a_i. And a_i >=k → a_i >=a_i → true. But in this case, x =k =a_i → a_i -a_i =0. So this is allowed.)
+
+OR
+
+b. k >a_i (from case2, which requires that a_i <k. Then x =a_i → a_i -a_i =0.)
+
+So for elements where b_i=0 and a_i>0, possible k's are k >=a_i.
+
+So combining all this, the approach is:
+
+For all elements where b_i>0: their required k is a_i -b_i. All such elements must agree on the same k. Let's call this k_candidate.
+
+Additionally, for elements where b_i=0: their possible k must be either k_candidate (if k_candidate >=a_i) or k_candidate must be a_i (but this would only apply if a_i -0 =k_candidate → a_i =k_candidate, which would require that k_candidate =a_i, and a_i >=k_candidate → a_i >=a_i → true).
+
+But wait, this is getting complicated. Let's think of the steps.
+
+First, for elements with b_i>0: they must have k = a_i -b_i. All such elements must have the same k_candidate.
+
+Second, for elements with b_i=0:
+
+If a_i ==0: no constraints (since after any k steps, it's zero).
+
+Else (a_i >0): k must be >=a_i OR k must be exactly a_i (since k can be a_i -0 =a_i, and a_i >=k → a_i >=a_i → true). Wait, if k =a_i, then x =min(k, a_i) =a_i → a_i -x =0. So it's allowed.
+
+So, after determining k_candidate as the required k from the elements where b_i>0, we need to check that for all elements where b_i=0:
+
+either a_i ==0 (no problem), or
+
+a_i <=k_candidate OR a_i ==k_candidate.
+
+Wait, no. Because for elements where b_i=0, a_i>0:
+
+if k_candidate >=a_i → allowed.
+
+if k_candidate <a_i → but then x =k_candidate (since k_candidate <a_i) → a_i -k_candidate must be 0. So a_i -k_candidate =0 → k_candidate =a_i. But this contradicts k_candidate <a_i. So the only possible way for this case is k_candidate >=a_i OR k_candidate =a_i (but that's part of >=). Wait no, if k_candidate is equal to a_i, then it's allowed.
+
+Wait, no. If the element has b_i=0 and a_i>0, then the possible k's are those that are >=a_i OR k_candidate =a_i (which is allowed when case1 is satisfied). But how does this fit into the overall constraints?
+
+Alternatively, for elements where b_i=0 and a_i>0:
+
+Either:
+
+k_candidate >=a_i (so x =a_i → a_i -x=0), OR
+
+k_candidate =a_i -b_i, but since b_i=0, that's a_i =k_candidate. Then x =min(k_candidate, a_i) =a_i → a_i -a_i=0. So this case is allowed.
+
+So for elements where b_i=0 and a_i>0:
+
+k_candidate must be >=a_i, or k_candidate must be a_i.
+
+Wait, but if the element is in the b_i=0 group, then the k_candidate is determined by the other elements (the ones with b_i>0). So the k_candidate is fixed to the value required by the elements with b_i>0. Then, for the elements with b_i=0 and a_i>0, we need to check if their a_i <=k_candidate OR a_i ==k_candidate.
+
+Wait, no. If the k_candidate is determined by elements with b_i>0, then for elements with b_i=0 and a_i>0, we must have either k_candidate >=a_i (so the element is handled by case2), or k_candidate =a_i (handled by case1: because then, b_i=0 would be a_i -k_candidate =0).
+
+So for elements with b_i=0 and a_i>0, the required condition is that k_candidate >=a_i OR k_candidate ==a_i.
+
+But k_candidate is a_i -b_i for some other elements where b_i>0. So in this case, the k_candidate is fixed, and the elements with b_i=0 must satisfy either k_candidate >=a_i or k_candidate ==a_i.
+
+So for example, if there's an element where b_i=0 and a_i=5, then k_candidate must be >=5, or exactly 5.
+
+But if k_candidate is 5, then that's allowed. Because then, a_i -k_candidate =5-5=0 → correct.
+
+If k_candidate is 6, then a_i=5 <k_candidate=6 → handled by case2 (b_i=0).
+
+But how do we check this in code.
+
+So the steps:
+
+For each test case:
+
+1. Check if any b[i] >a[i]. If yes, output NO.
+
+2. For elements where b[i] >0: collect their required k (a[i] -b[i]). All these must be the same. If any of them differ, output NO. Otherwise, candidate_k is that value.
+
+3. For elements where b[i] ==0:
+
+a. If a[i] ==0: no constraint.
+
+b. Else:
+
+i. Check that candidate_k >=a[i] OR candidate_k ==a[i].
+
+Which is equivalent to candidate_k >=a[i].
+
+Because if candidate_k ==a[i], then it's >=.
+
+So the condition is candidate_k >=a[i].
+
+But wait, no. For example, if a[i] =5, candidate_k=5 → satisfies candidate_k >=a[i] (5 >=5 is true). So the condition is candidate_k >=a[i] or candidate_k ==a[i], but in reality, candidate_k >=a[i] includes candidate_k ==a[i].
+
+So the condition is simply candidate_k >=a[i].
+
+Wait, no. If candidate_k is a[i] -b[j] for some j where b[j] >0, then candidate_k is fixed.
+
+For example, say candidate_k is 3 (from elements where b[j] >0). Then for an element with a[i] =5 and b[i] =0, we need candidate_k >=5 OR candidate_k ==a[i]. But candidate_k is 3, which is less than 5. So this element would require that 3 >=5, which is false. So the answer is NO.
+
+But in another case, if candidate_k is 5 (for example, from elements where b[j] = a[j] -5), then for an element with a[i] =5 and b[i]=0, candidate_k=5 >=5 → valid.
+
+So, the condition for elements where b[i]=0 and a[i] >0 is candidate_k >=a[i]. If this is not true, then the element is not handled by case1 or case2.
+
+So steps:
+
+After candidate_k is determined (from elements with b[i] >0):
+
+For all elements with b[i] =0 and a[i] >0:
+
+if candidate_k < a[i] → output NO.
+
+Also, check that for elements with b[i] >0, a[i] - candidate_k ==b[i] and a[i] >= candidate_k. But since candidate_k is a[i] -b[i], then a[i] - candidate_k =b[i], which is correct. And a[i] >= candidate_k → since candidate_k =a[i] -b[i], then a[i] >=a[i] -b[i] → b[i] >=0, which is already checked.
+
+So for elements with b[i] >0, the conditions are automatically satisfied.
+
+The only thing left is to check for elements with b[i] =0 and a[i] >0: candidate_k must be >=a[i].
+
+So, in code:
+
+for each test case:
+
+check all b[i] <=a[i].
+
+collect required_k for elements where b[i] >0.
+
+if required_k is empty:
+
+then check if for all elements with b[i] =0:
+
+if a[i] ==0 → ok.
+
+else:
+
+the candidate_k is not determined by any elements (since required_k is empty). So, for these elements, we need to choose a k that satisfies for each element where b[i] =0 and a[i] >0: k >=a[i].
+
+Also, since required_k is empty, the candidate_k can be any value.
+
+So, for this case, the answer is YES only if there exists a k >= all a[i] where b[i] =0 and a[i] >0.
+
+How?
+
+Because in this case, all elements have b[i] ==a[i] (since required_k is empty implies that all elements are either b[i] =a[i] or b[i] =0 and a[i] =0).
+
+Wait, no. required_k is empty means that there are no elements where b[i] >0. So all elements are either:
+
+a. b[i] =0 (can be a[i] >0 or a[i] =0).
+
+So for elements where b[i] =0 and a[i] =0 → no problem.
+
+For elements where b[i] =0 and a[i] >0 → need k >=a[i].
+
+So the problem reduces to: can we choose a k that is >= all a[i] where b[i] =0 and a[i] >0.
+
+If there are any such a[i], then k must be >= the maximum of these a[i].
+
+If there are no such elements (all b[i] =0 and a[i] =0), then any k is allowed (like zero).
+
+So, in this case, the answer is YES if and only if the maximum of a[i] (for those where b[i] =0 and a[i] >0) is <=k. But since required_k is empty, the k can be chosen freely. So the maximum of these a[i] must be <=k. But since k can be any value >= the maximum of those a[i], this is possible.
+
+So in this case, the answer is YES if and only if for all elements where b[i] =0 and a[i] >0, there exists a k >=a[i]. But since k can be any, that's possible if and only if there are no such elements where a[i] >0 and b[i] =0. Or, wait, no. For example, if there are elements where a[i] =5 and b[i] =0, then we can choose k=5 or higher. So the answer is YES.
+
+So in the case where required_k is empty, the answer is YES.
+
+Wait, but no. For example:
+
+Test case:
+
+n=1
+
+a = [5], b = [0].
+
+required_k is empty (since b[i] is 0). So required_k is empty. So in this case, the code would proceed to check if there exists a k that is >=5. For example, k=5, then the element becomes 5-5=0. So yes.
+
+So answer is YES.
+
+So in the code, when required_k is empty, the answer is YES.
+
+So the code for required_k empty is to output YES.
+
+But this is incorrect in some cases. Wait, no. Because when required_k is empty, all elements are either:
+
+1. a[i] ==0 and b[i] ==0.
+
+2. a[i] >0 and b[i] ==0.
+
+For the first case, no problem.
+
+For the second case, we can choose k >=a[i], which is possible. So answer is YES.
+
+So in the case where required_k is empty, the answer is YES.
+
+So the code for required_k empty is to output YES.
+
+But that's not the case. For example, if the test case is:
+
+a = [5], b = [0].
+
+required_k is empty. The code would output YES, which is correct.
+
+So the code's current logic for required_k empty is correct.
+
+So the problem comes when required_k is not empty. So let's go back to the sample input.
+
+Let's look at sample input 1:
+
+a = [3,5,4,1], b = [1,3,2,0].
+
+The elements with b[i] >0 are the first three:
+
+3→1: k=2.
+
+5→3: k=2.
+
+4→2: k=2.
+
+The fourth element has b[i] =0. a[i] =1.
+
+So required_k is [2,2,2]. All same, so candidate_k=2.
+
+Now, for the fourth element (b[i]=0, a[i]=1), we need candidate_k >=a[i] (1). 2 >=1 → yes.
+
+So conditions are met. So output is YES.
+
+But in our previous approach, we thought that for elements where a[i] >b[i], the required k is a[i] -b[i], which for the fourth element would be 1-0=1. But this is not the case. Because the fourth element's k is not in the required_k list, since b[i]=0. So the required_k list is only from elements where b[i] >0.
+
+So our previous approach was wrong. So the correct approach is:
+
+For elements where b[i] >0:
+
+required_k must be a_i -b_i, and all must agree.
+
+For elements where b[i] =0 and a[i] >0:
+
+candidate_k must be >=a[i].
+
+So the code steps are:
+
+For each test case:
+
+check all b[i] <=a[i]. If any not, output NO.
+
+collect required_k for all i where b[i] >0.
+
+if required_k is not empty:
+
+check all required_k are same. If not, output NO.
+
+candidate_k = required_k[0].
+
+check that for all i where b[i] >0:
+
+a[i] - candidate_k must equal b[i]. → This is ensured by candidate_k =a[i] -b[i].
+
+and a[i] >=candidate_k → which is ensured by candidate_k =a[i] -b[i] → a[i] >= candidate_k → since b[i] >0 → a[i] -b[i] <=a[i].
+
+for all i where b[i] ==0 and a[i] >0:
+
+if candidate_k <a[i] → output NO.
+
+else:
+
+(all elements have b[i] ==0 or a[i] ==b[i] (but a[i] ==b[i] can only be if a[i] ==b[i], which is handled here as part of b[i]==0 or not?)
+
+For required_k empty case:
+
+we need to choose a k that is >= all a[i] where b[i] ==0 and a[i] >0.
+
+So find the maximum a[i] among elements where b[i] ==0 and a[i] >0.
+
+If there are no such elements, then any k is allowed (like k=0), so output YES.
+
+else, the candidate_k must be >= the maximum a[i]. But since required_k is empty, the candidate_k can be chosen as any value >= the maximum a[i]. So it's possible. So output YES.
+
+So code for required_k empty is output YES.
+
+So the sample input first case:
+
+required_k is [2,2,2], candidate_k=2.
+
+For the fourth element (b[i]=0, a[i]=1):
+
+candidate_k=2 >=1 → yes.
+
+So output YES.
+
+So the code would correctly output YES.
+
+Now, let's see another example from the sample input.
+
+Third test case:
+
+4
+
+5 3 7 2
+
+1 1 1 1
+
+Then, check all b[i] <=a[i]. Yes.
+
+For elements with b[i] >0:
+
+The b array is [1,1,1,1].
+
+For each element:
+
+5-1=4.
+
+3-1=2.
+
+7-1=6.
+
+2-1=1.
+
+So required_k is [4,2,6,1]. These are different. So output NO. Which matches the sample output.
+
+Another sample input:
+
+Second test case:
+
+3
+
+1 2 1
+
+0 1 0
+
+So a is [1,2,1], b is [0,1,0].
+
+Check all b[i] <=a[i]. Yes.
+
+required_k is for elements where b[i] >0: only the second element (b[i]=1). So required_k is 2-1=1.
+
+candidate_k=1.
+
+For elements where b[i]==0 and a[i] >0:
+
+First element: a[i]=1. candidate_k=1 >=1 → yes.
+
+Third element: a[i]=1. candidate_k=1 >=1 → yes.
+
+So output YES.
+
+So code works.
+
+Another test case:
+
+Fourth test case:
+
+5
+
+1 2 3 4 5
+
+1 2 3 4 6
+
+Here, b[4] =6 >a[4] =5. So output NO.
+
+Fifth test case:
+
+1
+
+8
+
+0
+
+So required_k is empty. So output YES.
+
+Which matches the sample.
+
+Sixth test case:
+
+4
+
+6
+
+a is [4], b is [6] → but a is 4, b is 6. So b[i] >a[i]. Output NO.
+
+So sample outputs match.
+
+So the code needs to be updated to handle the new logic.
+
+So the steps are:
+
+For each test case:
+
+1. Check if any b[i] >a[i]. If yes, output NO.
+
+2. Collect all required_k = a[i] -b[i] for i where b[i] >0.
+
+3. If required_k is not empty:
+
+3a. Check if all required_k are the same. If not, output NO.
+
+3b. candidate_k = required_k[0].
+
+3c. For all i where b[i] ==0 and a[i] >0:
+
+if candidate_k < a[i] → output NO.
+
+4. Else (required_k is empty):
+
+4a. For all i where b[i] ==0 and a[i] >0 → collect their a[i]. Find the maximum of these a[i], say max_a.
+
+4b. If any such a[i] exists, then we can choose k = max_a, which is allowed. So output YES.
+
+Otherwise, output YES.
+
+So code:
+
+if required_k is empty:
+
+bool has = false;
+
+for each i:
+
+if (b[i] ==0 && a[i] >0) {
+
+has = true;
+
+max_a = max(max_a, a[i]);
+
+}
+
+if (has):
+
+we can choose k = max_a → which satisfies k >=max_a.
+
+So output YES.
+
+else:
+
+output YES.
+
+So code in required_k empty case is always YES.
+
+So the code can proceed as follows.
+
+Now, implement this in C++.
+
+So code:
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void solve() {
+
+int n;
+
+cin >> n;
+
+vector<int> a(n), b(n);
+
+for (int i=0; i<n; i++) {
+
+cin >> a[i];
+
+}
+
+for (int i=0; i<n; i++) {
+
+cin >> b[i];
+
+}
+
+bool possible = true;
+
+for (int i=0; i<n; i++) {
+
+if (b[i] > a[i]) {
+
+possible = false;
+
+}
+
+}
+
+if (!possible) {
+
+cout << "NO\n";
+
+return;
+
+}
+
+vector<int> required_k;
+
+for (int i=0; i<n; i++) {
+
+if (b[i] >0) {
+
+required_k.push_back(a[i] - b[i]);
+
+}
+
+}
+
+if (!required_k.empty()) {
+
+int candidate_k = required_k[0];
+
+for (int k : required_k) {
+
+if (k != candidate_k) {
+
+possible = false;
+
+break;
+
+}
+
+}
+
+if (!possible) {
+
+cout << "NO\n";
+
+return;
+
+}
+
+// Check elements where b[i] ==0 and a[i] >0.
+
+for (int i=0; i<n; i++) {
+
+if (b[i] ==0 && a[i] >0) {
+
+if (candidate_k < a[i]) {
+
+possible = false;
+
+break;
+
+}
+
+}
+
+}
+
+if (!possible) {
+
+cout << "NO\n";
+
+return;
+
+}
+
+// Also, for elements where b[i] >0, check that a[i] >= candidate_k.
+
+// But since candidate_k = a[i] -b[i], and b[i] >0, this implies a[i] >= candidate_k.
+
+// So no need to check.
+
+} else {
+
+// required_k is empty. So all elements are b[i] ==0 or a[i] ==0 and b[i] ==0.
+
+// We need to check if there exists a k that is >= all a[i] where b[i] ==0 and a[i] >0.
+
+// Since required_k is empty, all elements with b[i] >0 are not present. So all elements have b[i] ==0.
+
+// So, for elements with a[i] >0, k must be >=a[i].
+
+// The maximum a[i] where b[i] ==0 and a[i] >0 is the required minimum k. But since we can choose any k >= max_a.
+
+// So possible is yes.
+
+possible = true;
+
+}
+
+cout << (possible ? "YES" : "NO") << '\n';
+
+}
+
+int main() {
+
+ios::sync_with_stdio(false);
+
+cin.tie(0);
+
+int t;
+
+cin >> t;
+
+while (t--) {
+
+solve();
+
+}
+
+return 0;
+
+}
+
+Now, test this code against the sample input.
+
+Sample input 1:
+
+Test case 1:
+
+a = [3,5,4,1], b = [1,3,2,0].
+
+required_k is [3-1=2,5-3=2,4-2=2], candidate_k=2.
+
+For the fourth element (b[i]=0, a[i]=1), candidate_k=2 >=1 → ok.
+
+So output YES.
+
+Test case 2:
+
+a = [1,2,1], b = [0,1,0].
+
+required_k for elements where b[i]>0: only element 2 (b[i]=1). required_k =2-1=1.
+
+candidate_k=1.
+
+elements with b[i]=0 and a[i]>0:
+
+elements 0 and 2. a[i]=1. candidate_k=1 >=1 → ok.
+
+So output YES.
+
+Test case 3:
+
+a = [5,3,7,2], b = [1,1,1,1].
+
+required_k is [5-1=4, 3-1=2,7-1=6,2-1=1]. They are not all same. Output NO.
+
+Test case 4:
+
+a = [1,2,3,4,5], b = [1,2,3,4,6]. b[4] is 6>5. Output NO.
+
+Test case 5:
+
+a = [8], b = [0]. required_k is empty. Output YES.
+
+Test case 6:
+
+a = [4], b = [6]. Output NO.
+
+So the code should output the sample correctly.
+
+So this should be the correct solution.
+</think>
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+int n;
+cin >> n;
+vector<int> a(n), b(n);
+for (int i = 0; i < n; ++i) {
+cin >> a[i];
+}
+for (int i = 0; i < n; ++i) {
+cin >> b[i];
+}
+
+bool possible = true;
+for (int i = 0; i < n; ++i) {
+if (b[i] > a[i]) {
+possible = false;
+}
+}
+if (!possible) {
+cout << "NO\n";
+return;
+}
+
+vector<int> required_k;
+for (int i = 0; i < n; ++i) {
+if (b[i] > 0) {
+required_k.push_back(a[i] - b[i]);
+}
+}
+
+if (!required_k.empty()) {
+int candidate_k = required_k[0];
+for (int k : required_k) {
+if (k != candidate_k) {
+possible = false;
+break;
+}
+}
+if (!possible) {
+cout << "NO\n";
+return;
+}
+
+for (int i = 0; i < n; ++i) {
+if (b[i] == 0 && a[i] > 0 && candidate_k < a[i]) {
+possible = false;
+break;
+}
+}
+}
+
+cout << (possible ? "YES" : "NO") << '\n';
+}
+
+int main() {
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+
+int t;
+cin >> t;
+while (t--) {
+solve();
+}
+
+return 0;
+}
+```
+</!output!>
+<!input!>
+You will be given a competitive programming problem. Please reason step by step about the solution, then provide a complete implementation in C++17.
+
+Your solution must read input from standard input (cin), write output to standard output (cout).
+Do not include any debug prints or additional output.
+
+Put your final solution within a single code block:
+```cpp
+<your code here>
+```
+
+# Problem
+
+You are given a permutation p of length n. Remove one element from permutation to make the number of records the maximum possible.
+
+We remind that in a sequence of numbers a1, a2, ..., ak the element ai is a record if for every integer j (1 ≤ j < i) the following holds: aj < ai.
+
+Execution time limit: 2.0 seconds
+Memory limit: 256.0 MB
+
+## Input Format
+The first line contains the only integer n (1 ≤ n ≤ 105) — the length of the permutation.
+
+The second line contains n integers p1, p2, ..., pn (1 ≤ pi ≤ n) — the permutation. All the integers are distinct.
+
+## Output Format
+Print the only integer — the element that should be removed to make the number of records the maximum possible. If there are multiple such elements, print the smallest one.
+
+## Examples
+```input
+1
+1
+```
+```output
+1
+```
+-----
+```input
+5
+5 1 2 3 4
+```
+```output
+5
+```
+
+## Note
+In the first example the only element can be removed.
+</!input!>
+<!output!>
+Okay, let's see. The problem is about finding which element to remove from a permutation so that the number of records is maximized. And if there are multiple options, pick the smallest one.
+
+Hmm, first, I need to understand what a record is. Oh right, a record is an element that's larger than all previous elements. So for each element in the sequence, if it's bigger than everything before it, it's a record.
+
+The goal is to remove one element such that after removal, the number of records is as large as possible. And then choose the smallest element if there's a tie.
+
+Let me think about the approach.
+
+First, the straightforward way is for each element in the permutation, compute the number of records when that element is removed. Then find the maximum count and the corresponding element. But if n is up to 1e5, this approach would be O(n^2), which is way too slow. So we need a smarter way.
+
+So the challenge is to find a way to calculate for each element, how much the removal affects the number of records, in O(n) or O(n log n) time.
+
+Let's think about the original array's records. For each position i, if p[i] is a record, then it contributes to the total count. When we remove an element, say at index k, how does this affect the records?
+
+The removal can affect the records that come after k. Because elements after k are shifted left by one. So the elements after k might now have their previous elements (before removal) different, which could turn some elements into records or remove their record status.
+
+Wait, but when you remove an element at position k, the positions after k are now shifted left. So the elements after k are now at positions k, k+1, etc. So for each element after k, their previous elements are those before k (if any), and the elements from k onwards (excluding the removed element). So the records after k in the original array might be affected if the element at k was part of their record chain.
+
+Alternatively, maybe for each position i, we can precompute some information about how many records are there up to i, and after i, and then determine the effect of removing a certain element.
+
+Another idea: For each element, when it's removed, the records are the sum of records in the prefix up to k-1 and the modified suffix starting from k (original positions k+1, k+2, etc.), but adjusted for the fact that the elements after k are now shifted left.
+
+Wait, but the records in the prefix up to k-1 remain the same as before, right? Because those elements are before the removed element. So for the prefix up to k-1, the records are unchanged.
+
+For the suffix, starting at original positions k+1 and beyond (now shifted left by 1), each of those elements could have their record status affected. How?
+
+For example, consider an element at original position j (j > k) which was a record in the original array. If, after removing element k, the element j-1 (now at position j-1 in the new array) has to be checked against the previous elements. But in the original array, j's record status depends on the maximum of the elements up to j. If the element at k was part of that maximum, then removing it might allow j to still be a record, but if the element at k was the previous maximum up to j, then removing it might make j not a record anymore.
+
+Wait, perhaps this is getting complicated. Let me think of a way to model this.
+
+Let's first compute all the original records. Then, for each element at position i, determine how many records would be lost if i is removed, and how many new records would be gained in the suffix.
+
+Alternatively, for each element i, the total records after removal is (original records) minus the number of records that include i in their contribution, plus any new records that are formed in the suffix due to the removal of i.
+
+But this is vague. Let's try to formalize.
+
+Original records: all elements that are the maximum so far. So the set of positions where p[j] is greater than all previous elements.
+
+When we remove element i, the records are:
+
+1. All original records that are before i (since they are unaffected).
+2. All elements after i that were records in the original array but their status could change if the maximum up to their original position is affected by the removal of i.
+3. Also, elements after i that were not records in the original array might become records if their previous maximum (before i) is lower than the new maximum after removing i.
+
+Wait, but when you remove i, the elements after i are considered in their new positions. For each element j > i, in the new array, the elements before j (original j-1) are all the elements except i. So the maximum up to j-1 (original j) is the maximum of the original array up to j, excluding i.
+
+So for each j > i, to determine if it's a record in the new array, we need to check if p[j] is greater than all elements before it (i.e., elements 1..i-1 and i+1..j-1 in the original array). But that's equivalent to checking if p[j] is greater than the maximum of the original array up to j, except possibly excluding i.
+
+Alternatively, the maximum in the original array up to j is max_so_far_original[j]. If i was part of the elements contributing to that maximum, then removing i could reduce the maximum up to j. So for j > i, the new maximum up to j (original j) is the maximum of all elements except i up to j.
+
+But this seems difficult to compute for each i and j. So we need a way to precompute for each j, what's the maximum in the original array up to j, and what's the second maximum, perhaps?
+
+Wait, maybe for each j, the maximum up to j is known. So, for j > i, the maximum in the new array up to j (original j) would be:
+
+if p[i] was the original maximum up to j, then the new maximum is the second maximum up to j.
+
+But how to track that?
+
+Alternatively, for each i, when we remove it, the records after i could be determined by:
+
+For each j > i, the maximum in the original array up to j is m. If p[i] is not part of the maximum up to j (i.e., m is achieved before i or after i), then removing i doesn't affect the maximum up to j. But if the maximum up to j is p[i], then removing i would change the maximum up to j to the previous maximum.
+
+Wait, but j > i, so the maximum up to j (original) would include all elements up to j, including i. So if p[i] was the maximum in the original up to j, then removing i would require the new maximum up to j (original j) to be the maximum of the elements from 1 to j, excluding i.
+
+But how can we track that efficiently?
+
+Another approach: For each element i, determine how many records in the original array are after i, and depend on i being part of their maximum.
+
+Alternatively, think of each element j > i. For j to be a record in the original array, the maximum up to j must be p[j]. But after removing i, the maximum up to j (original j) would be the maximum of the original array up to j, excluding i. So if p[j] is still greater than this new maximum, then j remains a record. Otherwise, it's not.
+
+But for j to be a record in the original array, the original maximum up to j is p[j]. So if in the original array, j is a record, then when we remove i, the maximum up to j (original j) would be the maximum of all elements up to j except i. But since j is a record, the original maximum is p[j]. So even if i is removed, the maximum up to j (excluding i) could be either p[j] (if j is the original maximum) or the previous maximum up to j-1, or some other element. Wait, this is getting a bit messy.
+
+Alternatively, let's precompute two arrays:
+
+- left_max: where left_max[i] is the maximum value from the start up to i (original positions).
+
+But in the original array, the left_max array is straightforward. For each i, left_max[i] = max(left_max[i-1], p[i]).
+
+Now, the number of records in the original array is the number of times left_max[i] == p[i].
+
+Now, when we remove element k, the left_max for the new array (excluding k) would be different. But how to model that?
+
+Wait, for the new array, the elements are the original array without p[k]. So the new array is:
+
+elements 0..k-1, then elements k+1..n-1 (assuming 0-based indexing).
+
+So the new left_max array is built by iterating through these elements. So for the new array, the left_max starts as -infinity. Then, for each element in the new array, if it's larger than the current left_max, it's a record, and left_max is updated.
+
+But calculating this for each possible k would be O(n^2), which is not feasible.
+
+So we need a way to compute for each k, the number of records in the new array.
+
+Alternative approach:
+
+Compute for each position i, the number of records that are contributed by elements before i (i not included), and the number of records after i (i not included). But how?
+
+Alternatively, for each position i, the number of records in the new array when removing i is:
+
+original_records - (is i a record) + new_records_in_suffix.
+
+Because, removing i can only affect the suffix (elements after i). The prefix up to i-1 remains the same. So if i was a record in the original array, removing it would subtract 1. But then, the suffix after i might have some elements that were records, but their status could change because the elements before them (now up to i-1 and after i) might have a different maximum.
+
+So the main problem is to compute for each i, the number of new records in the suffix after i when i is removed.
+
+How to compute this efficiently?
+
+Let's think about the suffix. For each i, the elements after i in the original array are j = i+1, i+2, ..., n-1. In the new array, these elements are shifted left by one. The maximum up to each element j in the new array is the maximum of all elements before j (in the original array) except i.
+
+But how can we precompute this?
+
+Perhaps for each j, we can track whether the original maximum up to j (left_max[j]) is equal to p[j]. If so, then in the original array, j is a record. If we remove some element i < j, which was part of the elements considered in the maximum up to j, then perhaps j's record status could change.
+
+Alternatively, for each j, the record status depends on the maximum up to j in the original array. If that maximum is p[j], then j is a record. If we remove an element i < j, then the new maximum up to j in the new array would be the maximum of the elements up to j except i.
+
+So for j to be a record in the new array (after removing i), the maximum of elements up to j (excluding i) must be less than p[j].
+
+But how do we compute this for all i and j?
+
+Another idea: For each element j, find all elements i < j where removing i would cause j to become a record or stop being a record.
+
+But again, this seems challenging.
+
+Alternatively, let's consider that j is a record in the original array. So original_max_up_to_j is p[j]. When we remove i (i < j), the new_max_up_to_j is the maximum of all elements up to j except i. So if the original_max_up_to_j is p[j], then the new_max_up_to_j is the maximum of (original_max_up_to_j excluding i). But the original_max_up_to_j is p[j], which is the maximum. So if i is not the maximum up to j (i.e., p[i] < p[j]), then removing i doesn't change the maximum up to j, which remains p[j]. So j would still be a record. However, if i is the maximum up to j (but j is a record, which implies p[j] is the maximum up to j, so i can't be the maximum unless i == j. Which is impossible because i < j. So this case can't happen. Wait, that's a good point.
+
+Wait, j is a record in the original array, so p[j] is the maximum in the original up to j. So for any i < j, the maximum up to j is p[j]. So even if we remove i, the new maximum up to j (original j) would be the maximum of elements up to j except i. But since p[j] is part of that set (since i < j and j is part of the elements up to j), the maximum is still p[j]. So j would remain a record in the new array.
+
+Wait, that's a key insight. So for any j that was a record in the original array, and i < j, removing i would not affect j's status as a record. Because even after removing i, the maximum up to j (original j) is still p[j], which is the same as before. So j remains a record.
+
+Wait, but j is part of the new array. Because when i is removed, j is now in the new array (assuming j was not i). So in the new array, j's position is j-1 (if j > i). But the elements before j in the new array are all the elements up to j in the original array, except i. So the maximum of those elements is still <= p[j], but since p[j] is in those elements (since j > i), the maximum is p[j]. So j is a record in the new array.
+
+Wait, but in the new array, when you process j (original j's position becomes j-1 in the new array if i was before j), then the elements before j (original j) are all elements except i. So the maximum of those elements up to j in the original array (excluding i) is p[j], which is the same as before. So j is a record in the new array.
+
+So this implies that any original record j (j != i) will remain a record in the new array after removing i, provided that j is not removed.
+
+So the only records that are affected are:
+
+1. The element i itself, if it was a record. Removing it subtracts 1 from the count.
+
+2. Elements after i in the original array that were not records in the original array, but might become records in the new array when i is removed.
+
+Wait, because if those elements were not records in the original array, but after removing i, the maximum up to their position (in the new array) might be lower than their value, thus making them a new record.
+
+So for example, suppose in the original array, there's an element j that is after i. j is not a record in the original array because the maximum up to j was higher than j. But if that maximum was the element i, then removing i might lower the maximum up to j (original j) in the new array, which could allow j to become a record.
+
+So the key is that for elements j > i, if j is not a record in the original array, but in the original array the maximum up to j is p[i], then when we remove i, the new maximum up to j (original j) would be the maximum of the elements up to j excluding i. If that new maximum is less than p[j], then j becomes a record.
+
+So for each j > i, we need to check if the original maximum up to j is p[i], and whether after removing i, the new maximum up to j (original j) is less than p[j].
+
+But how to compute this efficiently?
+
+Let's precompute for each j, the maximum up to j (original_max[j]).
+
+If original_max[j] > p[j], then j is not a record. If in this case, the original_max[j] is equal to p[i], then removing i would require us to compute the new_max[j] as the maximum of elements up to j (original j) excluding i.
+
+The new_max[j] would be the maximum between the original_max[j's previous elements except i].
+
+But how to find that?
+
+Alternatively, for each j, we can precompute the maximum in the array up to j, but excluding i for all possible i. But that's O(n^2) which is impossible.
+
+Alternative idea: For each j, if the original_max[j] is not p[j], then the original_max[j] is the maximum of the elements up to j-1, which is left_max[j-1]. So in this case, j is not a record. So for j to become a record after removing i, the maximum of the elements up to j (original j) excluding i must be less than p[j].
+
+But how can we find this maximum?
+
+If the original_max[j] is left_max[j], which is the maximum up to j-1. But in that case, since j is not a record, left_max[j-1] >= p[j]. So even if we remove i, which is part of the elements up to j-1, the maximum up to j (original j) is the maximum of the elements up to j-1 except i. If this maximum is less than p[j], then j becomes a record.
+
+But how can we know if, for a given j and i < j, removing i would cause the maximum of elements up to j-1 (excluding i) to be less than p[j]?
+
+Let's break it down:
+
+Suppose original_max[j-1] is the maximum of elements up to j-1. Then, j is not a record if original_max[j-1] >= p[j].
+
+Now, when we remove i, the maximum up to j-1 (excluding i) is the maximum of (elements up to j-1 except i).
+
+If original_max[j-1] was achieved at some element m (the position where p[m] = original_max[j-1]). If i != m, then the maximum up to j-1 (excluding i) is still original_max[j-1]. So even after removing i, the maximum remains the same. So j would not become a record.
+
+Only if i == m (i.e., p[i] is the original_max[j-1]) does the maximum up to j-1 (excluding i) decrease. Then, the new_max would be the second maximum in the elements up to j-1 except i.
+
+So for j to become a record after removing i, two conditions must hold:
+
+1. i is the position where p[i] is the original_max[j-1].
+
+2. The second maximum in elements up to j-1 (excluding i) is less than p[j].
+
+So for each j where j is not a record, we need to find if there exists an i where i is the position of the original_max[j-1], and the second maximum up to j-1 (excluding i) is less than p[j].
+
+But how to compute this for all j and i?
+
+This seems quite involved. Let's think of possible pre-processing steps.
+
+First, precompute the original_max array, which is left_max[i] for each i.
+
+Then, for each j, if j is a record, left_max[j] = p[j]. If not, left_max[j] = left_max[j-1].
+
+Next, precompute for each position i, the next occurrence where left_max[k] is equal to p[i]. Because if i is the maximum up to some j, then removing i could affect j's maximum.
+
+Alternatively, for each i, find all j > i where left_max[j] == p[i]. Because in such cases, the original_max[j] is p[i], and j is not a record (since left_max[j] = p[i] and p[j] < p[i]).
+
+So when we remove i, the original_max[j] (which is p[i]) is no longer present, so the new_max[j] would be the maximum of the elements up to j excluding i.
+
+But how to compute that?
+
+Hmm.
+
+For each j where j is not a record, the original_max[j] is left_max[j] = left_max[j-1], which is the maximum up to j-1.
+
+So, for j to be a candidate for becoming a record after removing some i, i must be the position where p[i] == left_max[j-1]. Because when we remove i, the maximum up to j-1 (excluding i) would be the second maximum in the elements up to j-1 except i.
+
+So, for each j where j is not a record, and left_max[j-1] is achieved by exactly one element i (i.e., there's only one position i where p[i] = left_max[j-1]), then removing that i would cause the maximum up to j-1 to be the second maximum. If that second maximum is less than p[j], then j becomes a record.
+
+But if there are multiple positions i where p[i] equals left_max[j-1], then removing any of them wouldn't affect the maximum up to j-1 (since other elements with the same value are present). Wait, but the permutation has distinct elements, so left_max[j-1] is unique. So there is exactly one i where p[i] = left_max[j-1].
+
+Ah, right, permutation elements are distinct. So for each j, left_max[j-1] is the maximum of the elements up to j-1, which is unique. So there's exactly one i where p[i] = left_max[j-1]. So for each j that is not a record, there is exactly one i (i < j) such that if you remove i, the new_max for j is the maximum of elements up to j-1 except i.
+
+But since i is the only element with p[i] = left_max[j-1], removing it leaves the elements up to j-1 with a maximum equal to the second maximum up to j-1.
+
+So for each j, we can precompute the i where p[i] = left_max[j-1]. Then, when considering removing i, check if the second maximum up to j-1 is less than p[j]. If so, then j becomes a new record.
+
+So the steps could be:
+
+1. Precompute the original_max (left_max) array.
+
+2. Precompute the count of original records.
+
+3. For each j where j is not a record, find the i (since it's unique) where p[i] = left_max[j-1]. For such i, compute the second maximum in the elements up to j-1 excluding i.
+
+If that second_max < p[j], then removing i would add 1 to the total records (since j becomes a record).
+
+So for each i, the number of new records added by removing i is the number of j > i where:
+
+- j is not a record in original array.
+
+- i is the position where p[i] = left_max[j-1].
+
+- the second_max up to j-1 (excluding i) < p[j].
+
+So for each such j, removing i would add a new record.
+
+Now, the problem is to compute for each i, the number of such j's.
+
+But how?
+
+First, for each i, find all j where j is not a record, and left_max[j-1] is p[i].
+
+Then, for each such j, check if the second_max up to j-1 (excluding i) is less than p[j].
+
+If we can precompute for each j, the i that is the position of left_max[j-1], and also precompute the second_max up to j-1 when that i is removed, then we can quickly check for each j whether removing i would add a new record.
+
+But how to precompute the second_max up to j-1 when i is removed?
+
+Alternative idea: For each j, the second_max up to j-1 (excluding i) can be determined as follows. Since i is the position where p[i] is the maximum up to j-1, then the elements up to j-1 except i have maximum equal to the second maximum in the entire up to j-1.
+
+Wait, but the second maximum up to j-1 (original) is the maximum of all elements except the maximum (p[i]).
+
+So for j-1 elements, the second_max is the maximum of the elements up to j-1 excluding i.
+
+Thus, for j where j is not a record, the second_max up to j-1 is the same as the second_max of the elements up to j-1.
+
+So if we can precompute for each position, the second_max up to that position, then for each j, the second_max up to j-1 is known. Then, for j to become a record when i is removed, we need that second_max < p[j].
+
+So, the steps could be:
+
+- Precompute left_max array (original_max).
+
+- Precompute the original record count.
+
+- Precompute for each j, the second_max up to j-1.
+
+Then, for each j that is not a record:
+
+- The i is the position of left_max[j-1].
+
+- Check if second_max up to j-1 < p[j]. If yes, then removing i would add a record (j becomes a record).
+
+So, for each i, the number of additional records is the number of j's where:
+
+j > i,
+
+left_max[j-1] == p[i],
+
+and second_max[j-1] < p[j].
+
+So, for each i, the total records when removing i is:
+
+original_records - (is_i_record ? 1 : 0) + (number of j's where j > i, left_max[j-1] == p[i], and second_max[j-1] < p[j]).
+
+Thus, the problem reduces to:
+
+For each i, compute:
+
+current_max = original_records - (is_i_record) + count_new_records[i]
+
+Where count_new_records[i] is the number of j's > i where left_max[j-1] is p[i], and second_max[j-1] < p[j].
+
+We need to find the i that maximizes current_max, and if there are multiple, choose the smallest p[i].
+
+Now, the challenge is to compute count_new_records[i] for all i efficiently.
+
+How to precompute count_new_records[i]?
+
+First, we can precompute left_max and the second_max arrays.
+
+Compute left_max as the maximum up to each position.
+
+Compute second_max as the second maximum up to each position. How?
+
+We can track the first and second maximum as we iterate through the array.
+
+For each position i:
+
+prev_max = left_max[i-1]
+
+if p[i] > prev_max:
+
+new_max = p[i]
+
+new_second_max = prev_max
+
+else:
+
+new_max = prev_max
+
+if p[i] > second_max[i-1]:
+
+new_second_max = p[i]
+
+else:
+
+new_second_max = second_max[i-1]
+
+So, second_max[i] is the second maximum in the array up to position i.
+
+But this approach may not capture the correct second maximum in all cases.
+
+Wait, for example:
+
+elements are 5, 3, 4.
+
+left_max for each position:
+
+0:5 (since it's the first element)
+
+1:5 (3 is smaller)
+
+2:5 (4 is smaller)
+
+second_max would be:
+
+0:5 (no second?)
+
+Hmm, perhaps we need to track two variables: the current max and the current second max.
+
+Initialize:
+
+current_max = p[0]
+
+current_second = -infinity.
+
+For i from 1 to n-1:
+
+if p[i] > current_max:
+
+new_second = current_max
+
+new_max = p[i]
+
+elif p[i] > current_second:
+
+new_second = p[i]
+
+new_max = current_max
+
+else:
+
+new_second = current_second
+
+new_max = current_max
+
+Then, for each i, second_max[i] is current_second after processing i.
+
+But I'm not sure. Let's test with the example 5,3,4.
+
+Processing i=0:
+
+current_max =5, current_second = -inf.
+
+i=1 (3):
+
+3 is not >5, so check if > current_second (-inf). Yes. So new_second is 3. So second_max[1] =3.
+
+current_max remains 5.
+
+i=2 (4):
+
+4 is not >5. current_second is 3. 4>3. So new_second=4. current_max remains 5.
+
+So second_max[2] =4.
+
+So for the array [5,3,4], the second_max array would be [-inf, 3,4].
+
+But for the first element, second_max is undefined. So perhaps the second_max array starts from index 1.
+
+Hmm, perhaps the code can be written as follows:
+
+Initialize current_max to p[0], current_second to a very small value (since there's no second element yet). Then for each i >=1:
+
+if p[i] > current_max:
+
+new_second = current_max
+
+new_max = p[i]
+
+else if p[i] > current_second:
+
+new_second = p[i]
+
+new_max remains current_max
+
+else:
+
+new_second remains current_second
+
+new_max remains current_max
+
+Thus, for i=0, second_max is undefined (we can ignore or set to 0). For i >=1, second_max[i] is the current_second after processing i.
+
+Wait, but the second_max for the entire array up to i is the current_second.
+
+So perhaps the code is:
+
+vector<int> left_max(n), second_max(n);
+
+left_max[0] = p[0];
+
+second_max[0] = -infinity; // or some minimal value.
+
+for (int i = 1; i < n; ++i) {
+
+if (p[i] > left_max[i-1]) {
+
+left_max[i] = p[i];
+
+second_max[i] = left_max[i-1];
+
+} else {
+
+left_max[i] = left_max[i-1];
+
+if (p[i] > second_max[i-1]) {
+
+second_max[i] = p[i];
+
+} else {
+
+second_max[i] = second_max[i-1];
+
+}
+
+}
+
+}
+
+Wait, no. Because the second_max[i] is the second maximum up to i. For example, if the elements up to i are 5,3,4, then:
+
+left_max[0] =5.
+
+i=1 (3):
+
+left_max[1] =5.
+
+second_max[1] =3.
+
+i=2 (4):
+
+left_max remains 5. second_max is max(3,4) =4.
+
+So yes, the code for second_max[i] would be:
+
+if p[i] > left_max[i-1] (so left_max[i] = p[i], and second_max[i] = left_max[i-1].
+
+else:
+
+if p[i] > second_max[i-1], then second_max[i] = p[i], else same as before.
+
+This way, the second_max[i] is the second maximum in the array up to i.
+
+So with this, we can precompute for each j >=1, the second_max[j] is the second maximum in the array up to j.
+
+So, for j not a record (original_max[j] = left_max[j] = left_max[j-1] >= p[j]), the i is the position where p[i] == left_max[j-1].
+
+Now, for such j, when we remove i, the new_max up to j (original j) in the new array (excluding i) is the second_max[j-1]. Because the original_max[j-1] is p[i], and the second_max[j-1] is the second maximum up to j-1 (excluding i, since p[i] is the maximum). So if second_max[j-1] < p[j], then j becomes a record.
+
+Thus, for each j that is not a record, the count_new_records[i] increments by 1 if:
+
+- left_max[j-1] == p[i] (i is the position of the maximum up to j-1)
+
+- second_max[j-1] < p[j]
+
+So now, the plan is:
+
+1. Precompute left_max and second_max arrays.
+
+2. Precompute for each j, whether j is a record in the original array.
+
+3. Compute the original record count.
+
+4. For each j that is not a record, compute the i (position where p[i] = left_max[j-1]).
+
+5. For each such j, check if second_max[j-1] < p[j]. If yes, then the count_new_records[i] increases by 1.
+
+Once this is done, for each i, the total records after removing i is:
+
+original_record_count - (is_i_record ? 1 : 0) + count_new_records[i]
+
+We need to find the i that gives the maximum of this value. If multiple, choose the smallest p[i].
+
+So the steps in code:
+
+First, read n and the permutation p.
+
+Compute left_max and second_max arrays.
+
+Compute is_record array (a boolean array indicating if p[i] is a record).
+
+Compute original_record_count as the sum of is_record.
+
+Then, for each j from 1 to n-1:
+
+if j is a record, skip.
+
+else:
+
+find i such that p[i] == left_max[j-1]. Since permutation is unique, there is exactly one i.
+
+if second_max[j-1] < p[j], then increment count_new_records[i] by 1.
+
+But how to find i for a given left_max[j-1]?
+
+Since left_max[j-1] is the maximum in the array up to j-1, which is a permutation, so the value is unique. So we can precompute a map from value to their index. Because in a permutation, each value is unique, so each value in p can be mapped to its position.
+
+So create a pos array where pos[value] = index. Since p is a permutation of 1..n, this is possible.
+
+So for j >=1, left_max[j-1] is the maximum up to j-1. So the position i where p[i] == left_max[j-1] is pos[left_max[j-1]].
+
+Thus, for each j that is not a record, compute i = pos[left_max[j-1]].
+
+Then, check if second_max[j-1] < p[j]. If yes, count_new_records[i] +=1.
+
+Once all j's are processed, for each i, compute the total records as described.
+
+Then find the maximum total, and the minimal element with that maximum.
+
+Now, code steps:
+
+Implement:
+
+Read n, then p.
+
+Create a pos array: pos[p[i]] = i for each i.
+
+Compute left_max and second_max arrays.
+
+Compute is_record array and original_record_count.
+
+Initialize a count_new_records array (all 0).
+
+For each j in 1..n-1:
+
+if is_record[j] is true: continue.
+
+else:
+
+lm_jminus1 = left_max[j-1]
+
+i = pos[lm_jminus1]
+
+if second_max[j-1] < p[j]:
+
+count_new_records[i] +=1
+
+Then, compute for each i:
+
+current = original_record_count - (is_record[i] ? 1 : 0) + count_new_records[i]
+
+Find the maximum current value, and the smallest element p[i] among those with maximum current.
+
+Edge Cases:
+
+n=1: remove the only element, output 1.
+
+Another test case:
+
+Sample Input 2:
+
+5
+
+5 1 2 3 4
+
+Original left_max is [5,5,5,5,5]. So records are only 5 (the first element).
+
+For j=1 to 4 (positions 1-4 in 0-based), which are not records.
+
+For j=1 (value 1):
+
+left_max[j-1] is left_max[0] =5. So i=0 (pos[5] is 0).
+
+second_max[j-1] (j-1=0, second_max[0] is initialized to -infinity? Or maybe we need to handle j=0 differently. Wait, in the code above, for j=1 (original j in 1-based), j-1 is 0 (0-based), which is handled in the code.
+
+But for j=1 (0-based j=1?), no. Wait, the code in the example:
+
+Wait, in code, the for loop would be for j in 1..n-1 (assuming 0-based).
+
+Wait, perhaps I need to clarify.
+
+In code:
+
+Original p is 0-based. So for j from 1 to n-1 (since j starts from 1, as j-1 is 0 for the first iteration).
+
+For each j in 1 to n-1 (0-based):
+
+if is_record[j] is true, skip.
+
+Else:
+
+lm_jminus1 = left_max[j-1]
+
+i = pos[lm_jminus1]
+
+check if second_max[j-1] < p[j]
+
+if yes, count_new_records[i] +=1.
+
+In the sample input 2:
+
+Original p is [5,1,2,3,4].
+
+left_max array is [5,5,5,5,5].
+
+second_max array:
+
+For j=0 (0-based), left_max[0] =5. second_max[0] is initialized to -infinity.
+
+j=1: since p[1] is 1 <5. So left_max[1]=5. second_max[1] is max(-inf,1) → 1.
+
+j=2: p[2]=2 <5. left_max remains 5. second_max is max(1,2)=2.
+
+j=3: p[3]=3 <5. second_max becomes 3.
+
+j=4: p[4]=4 <5. second_max becomes4.
+
+So the second_max array is [ -inf, 1, 2, 3,4 ].
+
+Now, for j=1 (0-based):
+
+is_record[j] is false (since p[1] is 1, left_max[j] is 5).
+
+lm_jminus1 = left_max[0] =5 → i=0.
+
+Check second_max[0] (-inf) < p[j] (1). So yes. So count_new_records[0] +=1.
+
+For j=2 (0-based), p[j] is 2. left_max[j-1] is5 → i=0. second_max[j-1] is1 <2 → yes. So count_new_records[0] +=1.
+
+Similarly for j=3 and j=4:
+
+For j=3, second_max[j-1] is2 <3 → yes. count_new_records[0] +=1.
+
+For j=4, second_max[j-1] is3 <4 → yes. count_new_records[0] +=1.
+
+So count_new_records[0] =4.
+
+Thus, when removing element 0 (value 5), the total records would be:
+
+original_record_count (1) - is_record[0] (1) + 4 → 1-1+4=4.
+
+Which is the maximum possible. So the answer is 5.
+
+Which matches the sample.
+
+Thus, this approach works.
+
+Now, code:
+
+Implement the steps:
+
+Read n.
+
+Read p as a vector.
+
+Handle n=1: output p[0].
+
+Else:
+
+Create pos array: pos is a vector of size n+1 (since elements are 1-based?), or adjusted for 0-based.
+
+Wait, the permutation p has elements from 1 to n. So for each element in p, which can be up to n, pos is a vector where pos[value] gives the index.
+
+So code:
+
+vector<int> pos(n+1); // since p contains 1..n.
+
+for (int i = 0; i < n; ++i) {
+
+pos[p[i]] = i;
+
+}
+
+Compute left_max and second_max arrays:
+
+left_max[0] = p[0].
+
+second_max[0] = -infinity.
+
+For i from 1 to n-1:
+
+if p[i] > left_max[i-1]:
+
+left_max[i] = p[i]
+
+second_max[i] = left_max[i-1]
+
+else:
+
+left_max[i] = left_max[i-1]
+
+if p[i] > second_max[i-1]:
+
+second_max[i] = p[i]
+
+else:
+
+second_max[i] = second_max[i-1]
+
+Compute is_record array:
+
+vector<bool> is_record(n, false);
+
+int original_record_count =0;
+
+int current_max = 0;
+
+for (int i=0; i <n; ++i) {
+
+if (p[i] > current_max) {
+
+is_record[i] = true;
+
+current_max = p[i];
+
+original_record_count +=1;
+
+} else {
+
+is_record[i] = false;
+
+}
+
+}
+
+Alternatively, since left_max[i] is p[i] if it's a record. So:
+
+original_record_count is the number of times left_max[i] == p[i].
+
+Thus:
+
+original_record_count =0;
+
+for (int i=0; i <n; ++i) {
+
+if (left_max[i] == p[i]) {
+
+original_record_count +=1;
+
+is_record[i] = true;
+
+} else {
+
+is_record[i] = false;
+
+}
+
+}
+
+This may be more accurate.
+
+Then, for each j from 1 to n-1 (0-based):
+
+if is_record[j] is true: skip.
+
+Else:
+
+lm_jminus1 = left_max[j-1]
+
+i = pos[lm_jminus1]
+
+if second_max[j-1] < p[j]:
+
+count_new_records[i] +=1
+
+Initialize count_new_records as a vector of zeros.
+
+Once all j are processed, compute for each i:
+
+current = original_record_count - is_record[i] + count_new_records[i]
+
+Keep track of the maximum current value and the minimal element.
+
+Now, code.
+
+Edge case when n=1: output 1.
+
+Sample Input 1:
+
+n=1, p[0]=1. Output is 1.
+
+Sample Input 2:
+
+As discussed.
+
+Thus, code handles these cases.
+
+Now, let's write the code.
+
+But in code, need to handle:
+
+- For j from 1 to n-1 (0-based).
+
+Wait, for j in 1-based or 0-based? In the code, j runs from 1 to n-1 (0-based) because j starts from index 1 (since j-1 is 0).
+
+Because j can be up to n-1, and j-1 would be n-2.
+
+Yes.
+
+Now, code.
+
+Now, code:
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+
+int n;
+
+cin >> n;
+
+vector<int> p(n);
+
+for (auto &x : p) {
+
+cin >>x;
+
+}
+
+if (n ==1) {
+
+cout << p[0] << endl;
+
+return 0;
+
+}
+
+vector<int> pos(n+1);
+
+for (int i=0; i <n; ++i) {
+
+pos[p[i]] = i;
+
+}
+
+vector<int> left_max(n), second_max(n, -1);
+
+left_max[0] = p[0];
+
+second_max[0] = -1; // assuming elements are 1-based.
+
+for (int i=1; i <n; ++i) {
+
+if (p[i] > left_max[i-1]) {
+
+left_max[i] = p[i];
+
+second_max[i] = left_max[i-1];
+
+} else {
+
+left_max[i] = left_max[i-1];
+
+if (p[i] > second_max[i-1]) {
+
+second_max[i] = p[i];
+
+} else {
+
+second_max[i] = second_max[i-1];
+
+}
+
+}
+
+}
+
+vector<bool> is_record(n, false);
+
+int original_record_count =0;
+
+for (int i=0; i <n; ++i) {
+
+if (left_max[i] == p[i]) {
+
+is_record[i] = true;
+
+original_record_count +=1;
+
+}
+
+}
+
+vector<int> count_new_records(n,0);
+
+for (int j=1; j <n; ++j) {
+
+if (is_record[j]) continue;
+
+int lm_jminus1 = left_max[j-1];
+
+int i = pos[lm_jminus1];
+
+if (second_max[j-1] < p[j]) {
+
+count_new_records[i] +=1;
+
+}
+
+}
+
+int max_count = -1;
+
+int best_element = n+1;
+
+for (int i=0; i <n; ++i) {
+
+int current = original_record_count - (is_record[i] ? 1 : 0) + count_new_records[i];
+
+if (current > max_count || (current == max_count && p[i] < best_element)) {
+
+max_count = current;
+
+best_element = p[i];
+
+}
+
+}
+
+cout << best_element << endl;
+
+}
+
+But wait, in the code, the second_max array is initialized to -1, but what if the elements are larger than that? For example, if the first element is 1, then second_max[0] is -1, which is correct.
+
+But in code, when checking second_max[j-1] < p[j], which would be comparing integers. So in cases where j is 1, j-1=0, and second_max[0] is -1 (as in the first sample), the comparison will be correct.
+
+Yes.
+
+Testing sample input 2:
+
+n=5, p =5,1,2,3,4.
+
+left_max for all is 5.
+
+second_max for j=0 is -1, j=1 is1, j=2 is2, j=3 is3, j=4 is4.
+
+For j=1 (0-based):
+
+is_record[1] = false.
+
+lm_jminus1 = left_max[0] =5. i=0.
+
+second_max[0] =-1 <1? Yes. So count_new_records[0] +=1.
+
+j=2:
+
+is_record[2] is false.
+
+lm_jminus1 =5. i=0.
+
+second_max[1] =1 <2 → yes. count_new_records[0] +=1.
+
+j=3:
+
+same, second_max[2] =2 <3 → yes.
+
+j=4: second_max[3]=3 <4 → yes.
+
+So count_new_records[0] =4.
+
+Original record count is 1.
+
+current for i=0: 1 -1 +4 =4.
+
+Which is the maximum. So best_element is p[0] =5.
+
+Sample input 1:
+
+n=1, output 1.
+
+Another test case where removing a non-record element could add new records.
+
+But code should handle all cases.
+
+Potential issues:
+
+What if j=0 (but loop starts from j=1). But j starts from 1 in the loop, so j=0 is not processed. Which is correct, since j=0 is a record (it's the first element).
+
+Thus, code should be correct.
+</think>
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+int n;
+cin >> n;
+vector<int> p(n);
+for (auto &x : p) cin >> x;
+
+if (n == 1) {
+cout << p[0] << endl;
+return 0;
+}
+
+vector<int> pos(n + 1);
+for (int i = 0; i < n; ++i)
+pos[p[i]] = i;
+
+vector<int> left_max(n), second_max(n, -1);
+left_max[0] = p[0];
+second_max[0] = -1;
+
+for (int i = 1; i < n; ++i) {
+if (p[i] > left_max[i - 1]) {
+left_max[i] = p[i];
+second_max[i] = left_max[i - 1];
+} else {
+left_max[i] = left_max[i - 1];
+second_max[i] = (p[i] > second_max[i - 1]) ? p[i] : second_max[i - 1];
+}
+}
+
+vector<bool> is_record(n, false);
+int original_records = 0;
+for (int i = 0; i < n; ++i) {
+if (left_max[i] == p[i]) {
+is_record[i] = true;
+original_records++;
+}
+}
+
+vector<int> new_records(n, 0);
+for (int j = 1; j < n; ++j) {
+if (!is_record[j]) {
+int lm = left_max[j - 1];
+int i = pos[lm];
+if (second_max[j - 1] < p[j])
+new_records[i]++;
+}
+}
+
+int max_count = -1, best_element = n + 1;
+for (int i = 0; i < n; ++i) {
+int current = original_records - is_record[i] + new_records[i];
+if (current > max_count || (current == max_count && p[i] < best_element)) {
+max_count = current;
+best_element = p[i];
+}
+}
+
+cout << best_element << endl;
+return 0;
+}
+```
+</!output!>

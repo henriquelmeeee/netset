@@ -1,0 +1,250 @@
+<comment> As the "gemini 2.5 pro experimental 03.25" is a good model for explaining, some good examples are pasted here.
+
+<!input!>Hi,  
+I need to continue learning lambda calculus.  
+Here’s what I learned yesterday:
+"
+→ →  
+𝜆 λ -calculus (lambda calculus) is a formalization of a Turing-complete “language,” meaning we can develop mathematical formulas using aspects of computation, such as if-else, by only using functions, that is, mathematical expressions that receive arguments.  
+
+In general, it can be said that, while the functions are purely mathematical, the call to these functions contains computational aspects. A lambda function is formally defined as follows:  
+𝜆 𝑥 . 𝑀 λx.M  
+
+where 𝜆 𝑥 λx is a function with parameter 𝑥 x and 𝑀 M is the body of the function. To determine the value of 𝑥 x, we need the following notation:  
+
+(𝜆 𝑥 . 𝑀) 𝑁 (λx.M)N  
+
+where 𝑁 N is the value of 𝑥 x and can be an expression:  
+
+(𝜆 𝑥 . 𝑥 + 𝑥) 3 + 2 (λx.x+x)3+2  
+
+= 𝑥 + 𝑥 , 𝑥 = 3 + 2 = x + x, x = 3 + 2  
+
+= 3 + 2 + 3 + 2 = 3 + 2 + 3 + 2  
+
+= 5 + 5 = 10 = 5 + 5 = 10  
+
+Basically, (𝜆 𝑥 . 𝑥 + 𝑥) (λx.x+x) defines a function 𝑓(𝑥) = 𝑥 + 𝑥 f(x) = x + x and the parameter here is 3 + 2, meaning 𝑓(3 + 2) = (3 + 2) + (3 + 2) f(3 + 2) = (3 + 2) + (3 + 2).
+
+→ →  
+In Lambda Calculus, currying is the process where a function returns another function. It’s the basis for multi-parameter functions.
+
+To understand this, let’s look at the following:
+
+𝐹 = 𝜆 𝑥 . 𝜆 𝑦 . 𝑥 + 𝑦 F = λx.λy.x + y  
+
+Here, theoretically, we have a function that takes 𝑥 x and 𝑦 y and returns 𝑥 + 𝑦 x + y. However, note one thing: 𝑦 y is defined inside the body of 𝑥 x, meaning that instead of something like:  
+
+𝜆 𝑥 , 𝑦 . 𝑥 + 𝑦 λx,y.x+y  
+
+separating arguments with commas, we define that 𝜆 𝑥 λx returns the function 𝜆 𝑦 λy, which in turn does 𝑥 + 𝑦 x + y. Where did it get 𝑥 x from? Simple: it can use 𝑥 x because it inherits from the function 𝜆 𝑥 λx!  
+
+In practice, what happens is that all parameters are "stored" as the expression occurs. Here’s what happens when we define the value of 𝑥 x:  
+
+𝐹 3 = (𝜆 𝑥 . 𝜆 𝑦 . 𝑥 + 𝑦) 3 F3 = (λx.λy.x+y) 3  
+
+We substitute 𝑥 x with 3 in the body of the function:  
+
+𝜆 𝑦 . 3 + 𝑦 λy.3 + y  
+
+This gives us a new function. The generation of functions is essential because we are effectively removing functions that are no longer useful (in this case, after defining 𝑥 x, we no longer need 𝜆 𝑥 λx).  
+Now we just need to substitute 𝑦 y and invalidate 𝜆 𝑦 λy:  
+
+(𝜆 𝑦 . 3 + 𝑦) 5 = 3 + 5 (λy.3 + y)5 = 3 + 5"
+
+<!/input!>
+<!output!>
+**Free and Bound Variables**
+
+In Lambda Calculus, it is crucial to distinguish how variables relate to abstractions (functions \( \lambda \)). A variable within the body of a lambda expression can be either bound or free.
+
+A variable \( x \) is said to be **bound** within an expression \( M \) if it occurs within the scope of an abstraction \( \lambda x \). Formally, in the expression \( \lambda x . M \), the occurrence of \( x \) in \( M \) is bound by the outer \( \lambda x \). Any \( \lambda \) "captures" the variables with the same name within its body.
+
+Consider the expression:
+
+\[
+\lambda x . (\lambda y . x y) z
+\]
+
+In this expression:
+
+- The variable \( x \) in the subexpression \( x y \) is bound by the outer abstraction \( \lambda x \).
+- The variable \( y \) in the subexpression \( x y \) is bound by the inner abstraction \( \lambda y \).
+- The variable \( z \) is free because it is not within the scope of any \( \lambda z \). It "comes from the outside."
+
+It is important to note that the same variable can have both bound and free occurrences within a larger expression. For example:
+
+\[
+(\lambda x . x) x
+\]
+
+Here, the first \( x \) (within \( \lambda x . x \)) is bound by the abstraction \( \lambda x \), and the second \( x \) (the argument applied to the function) is free.
+
+The distinction between free and bound variables is essential for understanding substitution during function application (which we will discuss next as **β-reduction**). The idea is that when applying a function \( (\lambda x . M) N \), we only substitute the free occurrences of \( x \) within \( M \) with \( N \). The bound occurrences of \( x \) (those introduced by a \( \lambda x \) inside \( M \)) are unaffected.
+
+---
+
+**Alpha Conversion (α-conversion)**
+
+Alpha Conversion, or **α-renaming**, addresses an important point: the specific name of a bound variable does not matter for the meaning of the function. The function \( \lambda x . x \) is semantically identical to \( \lambda y . y \). Both represent the identity function.
+
+Formally, **α-conversion** allows renaming a bound variable and all its bound occurrences within the body of the abstraction, as long as the new name does not collide with any free variable already existing in the body.
+
+The rule is:
+
+\[
+\lambda x . M \rightarrow_{\alpha} \lambda y . [y/x] M
+\]
+
+Where:
+
+- \( \lambda x . M \) is the original expression.
+- \( \lambda y . [y/x] M \) is the resulting expression after the conversion.
+- \( y \) is the new name for the bound variable \( x \). \( y \) should not be a free variable in \( M \) (to avoid accidental capture).
+- \( [y/x] M \) denotes the operation of substituting all the free occurrences of \( x \) in \( M \) with \( y \). Since we are within the \( \lambda x \) abstraction, all occurrences of \( x \) that were bound by this \( \lambda x \) become the target of substitution.
+
+Example:
+
+\[
+\lambda x . (\lambda y . x y) \rightarrow_{\alpha} \lambda z . (\lambda y . z y)
+\]
+
+Here, we rename \( x \) to \( z \). This is valid because \( z \) was not a free variable in \( (\lambda y . x y) \).
+
+**α-conversion** is essential to avoid problems during substitution in **β-reduction**. If we try to substitute a variable in a context where the variable's name collides with an inner bound variable, we could accidentally change the meaning of the expression. **α-conversion** allows us to rename inner variables to prevent this unwanted "capture."
+
+For example, consider the expression:
+
+\[
+(\lambda x . \lambda y . x y) y
+\]
+
+If we apply substitution directly without care, we could get:
+
+\[
+\lambda y . y y
+\]
+
+This is incorrect because the original free \( y \) (which was the argument) was captured by the inner abstraction \( \lambda y \). The correct approach involves first using **α-conversion** in the inner expression to avoid a collision with the free \( y \) (the argument):
+
+Original expression:
+
+\[
+(\lambda x . \lambda y . x y) y
+\]
+
+Apply **α-conversion** to the inner part to avoid collision with the free \( y \):
+
+\[
+\lambda y . x y \rightarrow_{\alpha} \lambda z . x z
+\]
+
+Now the expression is:
+
+\[
+(\lambda x . \lambda z . x z) y
+\]
+
+Now we can safely substitute \( x \) with \( y \):
+
+\[
+\lambda z . y z
+\]
+
+This is the correct result, a function that takes an argument \( z \) and returns the free \( y \) (which came from the outer context) applied to \( z \).
+
+---
+
+**Beta Reduction (β-reduction)**
+
+**β-reduction** is the central computational rule of Lambda Calculus. It formalizes the process of applying a function to an argument, which you have already started exploring. When we have an expression of the form \( (\lambda x . M) N \) (called a **redex**, reducible expression), we can perform a **β-reduction**.
+
+The rule is:
+
+\[
+(\lambda x . M) N \rightarrow_{\beta} [N/x] M
+\]
+
+Where:
+
+- \( (\lambda x . M) N \) is the β-redex, where \( \lambda x . M \) is the function and \( N \) is the argument.
+- \( [N/x] M \) is the result of the reduction. This notation means "substitute all free occurrences of \( x \) in the body \( M \) with the expression \( N \)."
+
+Example (your example revisited with formal notation):
+
+\[
+(\lambda x . x + x) (3 + 2)
+\]
+
+Applying **β-reduction**:
+
+\[
+[(3+2)/x] (x + x)
+\]
+
+We substitute the free occurrences of \( x \) in \( (x + x) \) with \( (3 + 2) \):
+
+\[
+(3 + 2) + (3 + 2)
+\]
+
+Which can be simplified by usual arithmetic to:
+
+\[
+5 + 5 = 10
+\]
+
+---
+
+**Example with Currying:**
+
+\[
+F = \lambda x . \lambda y . x + y
+\]
+
+\[
+F 3 5 = (\lambda x . \lambda y . x + y) 3 5
+\]
+
+First **β-reduction** (applying 3 to \( F \)):
+
+\[
+(\lambda x . \lambda y . x + y) 3 \rightarrow_{\beta} [3/x] (\lambda y . x + y)
+\]
+
+We substitute the free occurrences of \( x \) in \( (\lambda y . x + y) \) with 3:
+
+\[
+\lambda y . 3 + y
+\]
+
+Now the expression is:
+
+\[
+(\lambda y . 3 + y) 5
+\]
+
+Second **β-reduction** (applying 5 to the resulting function):
+
+\[
+(\lambda y . 3 + y) 5 \rightarrow_{\beta} [5/y] (3 + y)
+\]
+
+We substitute the free occurrences of \( y \) in \( (3 + y) \) with 5:
+
+\[
+3 + 5
+\]
+
+Which simplifies to:
+
+\[
+8
+\]
+
+**β-reduction** is the engine of computation in Lambda Calculus. A computation consists of repeatedly applying **β-reduction** to any redex found in the expression, until no more redexes remain. The final expression, with no more β-redexes, is called **normal form**.
+
+It is important to remember the interaction with **α-conversion**: before performing the substitution \( [N/x] M \), we check if any free variable in \( N \) might be captured by a \( \lambda \) inside \( M \). If there is such a risk, we apply **α-conversion** inside \( M \) to rename the conflicting bound variable before proceeding with the **β-reduction**.
+
+These three concepts—**free and bound variables**, **α-conversion**, and **β-reduction**—form the core of Lambda Calculus. Understanding them deeply is essential for working with the system and understanding how computation is performed through the purely syntactical manipulation of expressions.
+</!output!>

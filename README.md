@@ -13,3 +13,12 @@ code that the CPUs execute -- ..." [...]
 
 So, if you want to contribute with this dataset on the teaching part of it (it is, when the model must explain something to the user like a teacher), please try to do that after
 the explanation.
+
+## THE STYLE OF THE DATASET
+
+I use the following to divide the dataset:
+<!input!> and </!input!> -- opens and closes an input.
+<!output!> and </!output!> -- opens and closes an output (model's expected output for training).
+<comment> -- used in the top of all .txt files to tell something important about that specific file.
+for datasets that does not have input-output (so they are based on text completion), it's used the flag <TEXT_COMPLETION> at the beginning of the text file.
+<!conversation!> -- used to group <!input!> and <!output!> if they come from the same context
